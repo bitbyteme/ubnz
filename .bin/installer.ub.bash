@@ -1,5 +1,6 @@
 #! /bin/sh
 
+#
 fn_setup(){
    sudo echo ''
    # adding apt-get restricted repositories by editing 
