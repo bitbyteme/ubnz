@@ -40,9 +40,9 @@ fn_setup_redis(){
 }
 
 fn_setup_python(){
-   curl "$pyURL" | tar -zvx
-
-
+   #curl "$pyURL" | tar -zvx
+   
+   
 
 }
 
