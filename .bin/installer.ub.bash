@@ -42,12 +42,13 @@ fn_setup_redis(){
 fn_setup_sys(){
    # setting up fn_setup_git
    cat  ~/.dotfiles/bashrc >> ~/.bashrc
+   cat ~/.dotfiles/zshrc >> ~/.zshrc
+
    
    ln -s ~/.dotfiles/aliasrc ~/.aliasrc
    ln -s ~/.dotfiles/exportrc ~/.exportrc
    ln -s ~/.dotfiles/vimrc ~/.vimrc
    ln -s ~/.dotfiles/vim ~/.vim
-   ln -s ~/.dotfiles/zshrc ~/.zshrc
 
    # setting up fn_setup_redis
 
