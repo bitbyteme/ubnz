@@ -1,6 +1,6 @@
 #! /bin/sh
 
-fn_setup(){
+fn_setup_init(){
    sudo echo ''
    # adding apt-get restricted repositories by editing 
    # /etc/apt/sources.list file
@@ -39,11 +39,19 @@ fn_setup_redis(){
    cd "$curDir/$srcDir/src"; make test
 }
 
+fn_setup_python(){
+   curl "$pyURL" | tar -zvx
+
+
+
+}
+
+
+
 fn_setup_sys(){
    # setting up fn_setup_git
    cat  ~/.dotfiles/bashrc >> ~/.bashrc
    cat ~/.dotfiles/zshrc >> ~/.zshrc
-
    
    ln -s ~/.dotfiles/aliasrc ~/.aliasrc
    ln -s ~/.dotfiles/exportrc ~/.exportrc
@@ -62,19 +70,24 @@ main(){
    pkgsBasic="$pkgsBasic openssh-server openssh-client"
    pkgsExtra='vim-nox zsh tcl8.5' 
    pkgsInstall="$pkgsBasic $pkgsExtra"
-   #fn_setup
+   #fn_setup_init
 
    # variable for fn_setup_git
    gitRepo='ubnz'
    gitAddress="git://github.com/bitbyteme/$gitRepo.git"
-   fn_setup_git
+   #fn_setup_git
 
 
    redisVer='2.4.4'
    redisURL="http://redis.googlecode.com/files/redis-$redisVer.tar.gz"
    #fn_setup_redis
-  
-   fn_setup_sys
+   
+   pyVer='2.7.2'
+   pyURL="http://python.org/ftp/python/$pyVer/Python-$pyVer.tgz"
+   fn_setup_python
+
+
+   #fn_setup_sys
 
 }
 
