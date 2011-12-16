@@ -140,7 +140,7 @@ main(){
    # variable for fn_setup_git
    gitRepo='ubnz'
    gitAddress="git://github.com/bitbyteme/$gitRepo.git"
-   fn_setup_git
+   #fn_setup_git
 
 
    redisVer='2.4.4'
