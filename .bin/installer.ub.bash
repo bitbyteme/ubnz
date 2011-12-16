@@ -8,6 +8,9 @@
 ## need a test for user. must be root
 #
 
+
+[ "$USER" = 'root' ] || exit 1
+
 fn_setup_init(){
    
    # adding apt-get restricted repositories by editing 
