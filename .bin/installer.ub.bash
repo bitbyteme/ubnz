@@ -93,8 +93,8 @@ fn_setup_python(){
    
    cd "$curDir"
   
-   curl "http://python-distribute.org/distribute_setup.py" | ./usr/local/bin/python2.7
-   curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py  | ./usr/local/bin/python2.7
+   curl "http://python-distribute.org/distribute_setup.py" | /usr/local/bin/python2.7
+   curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py  | /usr/local/bin/python2.7
 
 
 }
