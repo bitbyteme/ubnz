@@ -149,14 +149,14 @@ main(){
    
    pyVer='2.7.2'
    pyURL="http://python.org/ftp/python/$pyVer/Python-$pyVer.tgz"
-   #fn_setup_python
+   fn_setup_python
 
    ndVer='0.6.6'
    ndURL="http://nodejs.org/dist/v0.6.6/node-v$ndVer.tar.gz"
-   fn_setup_nodejs
+   #fn_setup_nodejs
    
 
-   fn_setup_sys
+   #fn_setup_sys
 
 }
 
