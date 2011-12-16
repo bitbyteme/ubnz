@@ -85,11 +85,11 @@ fn_setup_redis(){
 }
 
 fn_setup_python(){
-   #curl "$pyURL" | tar -zvx
-   #cd "Python-$pyVer"
-   #./configure &&
-   #make  &&
-   #make altinstall || exit 3
+   curl "$pyURL" | tar -zvx
+   cd "Python-$pyVer"
+   ./configure &&
+   make  &&
+   make altinstall || exit 3
    
    cd "$curDir"
   
@@ -150,7 +150,7 @@ main(){
    
    pyVer='2.7.2'
    pyURL="http://python.org/ftp/python/$pyVer/Python-$pyVer.tgz"
-   fn_setup_python
+   #fn_setup_python
 
    ndVer='0.6.6'
    ndURL="http://nodejs.org/dist/v0.6.6/node-v$ndVer.tar.gz"
