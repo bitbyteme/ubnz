@@ -64,7 +64,7 @@ fn_setup_init(){
 
 fn_setup_git(){
    # clone repo  
-   git clone "$gitAddress" || exit 4
+   git clone "$gitAddress" || exit 1
    cd "$gitRepo" 
    cp -R * .* ~/. 2>/dev/null
 
@@ -77,7 +77,7 @@ fn_setup_git(){
 fn_setup_redis(){
    curl "$redisURL" | tar -zvx
    srcDir="redis-$redisVer"
-   [ -e "$srcDir" ] || exit 1
+   [ -e "$srcDir" ] || exit 2
    
    cd "$srcDir"; make
    cd "$curDir/$srcDir/src"; make test
@@ -90,7 +90,7 @@ fn_setup_python(){
    ./configure &&
    make -j &&
    make test &&
-   make altinstall
+   make altinstall || exit 3
    
    cd "$curDir"
   
@@ -101,12 +101,12 @@ fn_setup_python(){
 fn_setup_nodejs(){
    curl "$ndURL" | tar -zvx
    cd "node-v$ndVer"
-   ./configure
-   make
-   sudo make install
+   ./configure &&
+   make &&
+   make install || exit 4
    cd "$curlDir"
 
-   curl 'http://npmjs.org/install.sh' | sh
+   curl 'http://npmjs.org/install.sh' | sh 
    npm 'express'
 
 }
@@ -131,7 +131,8 @@ main(){
 
    # variables for fn_setup
    pkgsBasic='build-essential curl wget git-core openssl libssl-dev'
-   pkgsBasic="$pkgsBasic openssh-server openssh-client"
+   pkgsBasic="$pkgsBasic openssh-server openssh-client libreadline-dev"
+   pkgsBasic="$pkgsBasic libsqlite3-dev libbz2-dev libssl-dev"
    pkgsExtra='vim-nox zsh tcl8.5' 
    pkgsInstall="$pkgsBasic $pkgsExtra"
    #fn_setup_init
