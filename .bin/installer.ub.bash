@@ -1,15 +1,59 @@
 #! /bin/sh
 
+# MUST BE Root
+# this script CANT be run using sudo
+# 
+
+#
+## need a test for user. must be root
+#
+
 fn_setup_init(){
-   sudo echo ''
+   
    # adding apt-get restricted repositories by editing 
    # /etc/apt/sources.list file
    if ! [ -f '/etc/apt/sources.list.bak' ]; then  
-      sudo chmod 777 /etc/apt
-      sudo mv /etc/apt/sources.list /etc/apt/sources.list.bak
-      sudo cat /etc/apt/sources.list.bak | sed -e 's;^# deb http; deb http;' -e 's;^# deb-src ; deb-src ;' > /etc/apt/sources.list
-      sudo chmod 755 /etc/apt
+      chmod 777 /etc/apt
+      mv /etc/apt/sources.list /etc/apt/sources.list.bak
+      cat /etc/apt/sources.list.bak | sed -e 's;^# deb http; deb http;' -e 's;^# deb-src ; deb-src ;' > /etc/apt/sources.list
+      chmod 755 /etc/apt
    fi
+
+   ########################################################
+
+   passwd
+   dpkg-query -W -f='${package}\n' > all.pkgs.gogrid
+   apt-get -y update
+
+   apt-get -y install linux-virtual
+   
+# phase 2
+# the file all.pkgs.setup is the minimum install on vmware after some basic
+# setup.
+# while the file all.pkgs.gogrid is the pkgs installed at gogrid ub 10.04 
+# server
+
+
+   cat all.pkgs.gogrid | while read pp; do 
+      grep -q "$pp" all.pkgs.setup || echo "$pp" >> extra 
+   done
+
+# assuming the new linux kernel installed is the one loaded.
+# emoving all pkgs different in the ub.gogrid from vmware version.
+#
+# but left behing appArmor
+
+   cat extra | while read pp; do 
+      echo "$pp" | grep -q 'apparmor'  && continue
+      apt-get -y purge $pp
+   done 
+   apt-get -y autoremove
+   reboot
+
+   apt-get -y install agit-core zsh tcl8.5
+   apt-get -y upgrade
+
+   ######################################################
    
    sudo apt-get -y update
    sudo apt-get -y upgrade
@@ -37,15 +81,35 @@ fn_setup_redis(){
    
    cd "$srcDir"; make
    cd "$curDir/$srcDir/src"; make test
+   cd "$curDir"
 }
 
 fn_setup_python(){
-   #curl "$pyURL" | tar -zvx
+   curl "$pyURL" | tar -zvx
+   cd "Python-$pyVer"
+   ./configure &&
+   make -j &&
+   make test &&
+   make altinstall
    
-   :
+   cd "$curDir"
+  
+
 
 }
 
+fn_setup_nodejs(){
+   curl "$ndURL" | tar -zvx
+   cd "node-v$ndVer"
+   ./configure
+   make
+   sudo make install
+   cd "$curlDir"
+
+   curl 'http://npmjs.org/install.sh' | sh
+   npm 'express'
+
+}
 
 
 fn_setup_sys(){
@@ -75,19 +139,23 @@ main(){
    # variable for fn_setup_git
    gitRepo='ubnz'
    gitAddress="git://github.com/bitbyteme/$gitRepo.git"
-   #fn_setup_git
+   fn_setup_git
 
 
    redisVer='2.4.4'
    redisURL="http://redis.googlecode.com/files/redis-$redisVer.tar.gz"
-   #fn_setup_redis
+   fn_setup_redis
    
    pyVer='2.7.2'
    pyURL="http://python.org/ftp/python/$pyVer/Python-$pyVer.tgz"
-   fn_setup_python
+   #fn_setup_python
 
+   ndVer='0.6.6'
+   ndURL="http://nodejs.org/dist/v0.6.6/node-v$ndVer.tar.gz"
+   fn_setup_nodejs
+   
 
-   #fn_setup_sys
+   fn_setup_sys
 
 }
 
@@ -95,7 +163,6 @@ main
 echo 'done'
 #echo 'press enter to reboot, or ^C to quit \c'; read
 #reboot
-
 
 
 

@@ -12,10 +12,10 @@ export PATH=~/.work/py:~/.work:$PATH
 #   export CXX="g++-4.2"
 #   export FFLAGS="-ff2c"
 
-export CXX=/usr/bin/g++-4.2
-export CC=/usr/bin/gcc-4.2
-export CPP=/usr/bin/cpp-4.2
-export LD=/usr/bin/ld
+#export CXX=/usr/bin/g++-4.2
+#export CC=/usr/bin/gcc-4.2
+#export CPP=/usr/bin/cpp-4.2
+#export LD=/usr/bin/ld
 
 export PYTHONPATH=/usr/local/lib/python:$PYTHONPATH
 export PYTHONSTARTUP=~/.pythonrc
