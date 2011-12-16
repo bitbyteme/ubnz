@@ -144,7 +144,7 @@ main(){
 
    redisVer='2.4.4'
    redisURL="http://redis.googlecode.com/files/redis-$redisVer.tar.gz"
-   fn_setup_redis
+   #fn_setup_redis
    
    pyVer='2.7.2'
    pyURL="http://python.org/ftp/python/$pyVer/Python-$pyVer.tgz"
