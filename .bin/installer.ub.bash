@@ -87,8 +87,8 @@ fn_setup_redis(){
 fn_setup_python(){
    curl "$pyURL" | tar -zvx
    cd "Python-$pyVer"
-   ./configure #&&
-   #make -j &&
+   ./configure &&
+   make  #&&
    #make test &&
    #make altinstall || exit 3
    
