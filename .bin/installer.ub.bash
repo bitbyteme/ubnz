@@ -19,7 +19,7 @@ fn_setup_gogrid(){
    
    echo 'export oldKernel="$(uname -a)"' >> ~/.bashrc
    apt-get -y update
-   apt-get install curl 
+   apt-get -y install curl 
    
    curl 'https://raw.github.com/bitbyteme/ubnz/master/.bin/all.pkgs.setup' > "$tmp/all.pkgs.min"
    
