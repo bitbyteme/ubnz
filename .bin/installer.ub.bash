@@ -15,12 +15,6 @@ fn_setup_gogrid(){
 
    passwd
    dpkg-query -W -f='${package}\n' > all.pkgs.gogrid
-   apt-get -y update
-
-   apt-get -y install linux-virtual
-   echo 'export install=01' >> ~/.bashrc
-   echo 'echo "A"' >> ~/.bashrc
-   reboot
    
 # phase 2
 # the file all.pkgs.setup is the minimum install on vmware after some basic
@@ -31,6 +25,13 @@ fn_setup_gogrid(){
 }
 
 fn_gogrid02(){
+   apt-get -y update
+
+   apt-get -y install linux-virtual
+   echo 'export install=01' >> ~/.bashrc
+   echo 'echo "A"' >> ~/.bashrc
+   reboot
+
    cat all.pkgs.gogrid | while read pp; do 
       grep -q "$pp" all.pkgs.setup || echo "$pp" >> extra 
    done
