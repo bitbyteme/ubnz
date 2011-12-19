@@ -20,7 +20,7 @@ fn_setup_gogrid(){
    
    echo 'export oldKernel="$(uname -a)"' >> ~/.bashrc
    apt-get -y update
-   apt-get -y install linux-virtual
+   #apt-get -y install linux-virtual
    #reboot
    
 # phase 2
@@ -165,6 +165,7 @@ fn_setup_sys(){
 main(){
    curDir="$PWD"
    tmp="/tmp/$$/"
+   mkdir -p "$tmp" || exit 1
 
    fn_setup_gogrid
    #fn_setup_init
