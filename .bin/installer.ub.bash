@@ -13,10 +13,10 @@
 
 fn_setup_gogrid(){
 
-   dpkg-query -W -f='${package}\n' > all.pkgs.gogrid
+   dpkg-query -W -f='${package}\n' > "$tmp/all.pkgs.gogrid"
    #echo 'export install=01' >> ~/.bashrc
    
-   curl 'https://raw.github.com/bitbyteme/ubnz/master/.bin/all.pkgs.setup' > all.pkgs.min
+   curl 'https://raw.github.com/bitbyteme/ubnz/master/.bin/all.pkgs.setup' > "$tmp/all.pkgs.min"
    
    echo 'export oldKernel="$(uname -a)"' >> ~/.bashrc
    apt-get -y update
@@ -164,6 +164,7 @@ fn_setup_sys(){
 
 main(){
    curDir="$PWD"
+   tmp="/tmp/$$/"
 
    fn_setup_gogrid
    #fn_setup_init
@@ -172,6 +173,8 @@ main(){
    #fn_setup_python
    #fn_setup_nodejs
    #fn_setup_sys
+
+   rm -rf "$tmp"
 
 }
 
