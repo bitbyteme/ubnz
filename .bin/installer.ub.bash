@@ -16,10 +16,13 @@ fn_setup_gogrid(){
    dpkg-query -W -f='${package}\n' > "$tmp/all.pkgs.gogrid"
    #echo 'export install=01' >> ~/.bashrc
    
-   curl 'https://raw.github.com/bitbyteme/ubnz/master/.bin/all.pkgs.setup' > "$tmp/all.pkgs.min"
    
    echo 'export oldKernel="$(uname -a)"' >> ~/.bashrc
    apt-get -y update
+   apt-get install curl 
+   
+   curl 'https://raw.github.com/bitbyteme/ubnz/master/.bin/all.pkgs.setup' > "$tmp/all.pkgs.min"
+   
    #apt-get -y install linux-virtual
    #reboot
    
