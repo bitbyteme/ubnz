@@ -15,6 +15,7 @@ fn_setup_gogrid(){
 
    passwd
    dpkg-query -W -f='${package}\n' > all.pkgs.gogrid
+   echo 'export install=01' >> ~/.bashrc
    
 # phase 2
 # the file all.pkgs.setup is the minimum install on vmware after some basic
