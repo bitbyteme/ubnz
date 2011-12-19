@@ -13,7 +13,6 @@
 
 fn_setup_gogrid(){
 
-   passwd
    dpkg-query -W -f='${package}\n' > all.pkgs.gogrid
    echo 'export install=01' >> ~/.bashrc
    
