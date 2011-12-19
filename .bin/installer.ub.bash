@@ -171,7 +171,7 @@ main(){
 
 }
 
-#main
+main
 echo 'done'
 #echo 'press enter to reboot, or ^C to quit \c'; read
 #reboot
