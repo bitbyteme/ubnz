@@ -30,7 +30,7 @@ fn_setup_gogrid(){
 
 }
 
-fn_gogrid02()
+fn_gogrid02(){
    cat all.pkgs.gogrid | while read pp; do 
       grep -q "$pp" all.pkgs.setup || echo "$pp" >> extra 
    done
@@ -171,7 +171,7 @@ main(){
 
 }
 
-main
+#main
 echo 'done'
 #echo 'press enter to reboot, or ^C to quit \c'; read
 #reboot
