@@ -1,4 +1,5 @@
 adduser
+apparmor
 apt
 apt-utils
 aptitude
@@ -73,6 +74,7 @@ libattr1
 libblkid1
 libbsd0
 libbz2-1.0
+libbz2-dev
 libc-bin
 libc-dev-bin
 libc6
@@ -121,6 +123,7 @@ liblzma1
 libmagic1
 libmpfr1ldbl
 libncurses5
+libncurses5-dev
 libncursesw5
 libnewt0.52
 libnih-dbus1
@@ -136,7 +139,9 @@ libplymouth2
 libpng12-0
 libpopt0
 libpython2.6
+libreadline-dev
 libreadline6
+libreadline6-dev
 libruby1.8
 libsasl2-2
 libsasl2-modules
@@ -145,6 +150,7 @@ libsepol1
 libsigc++-2.0-0c2a
 libslang2
 libsqlite3-0
+libsqlite3-dev
 libss2
 libssl-dev
 libssl0.9.8
@@ -170,6 +176,7 @@ libxext6
 libxmuu1
 linux-firmware
 linux-image-2.6.32-33-virtual
+linux-image-2.6.32-36-virtual
 linux-image-virtual
 linux-libc-dev
 linux-virtual
