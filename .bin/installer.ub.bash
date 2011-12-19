@@ -11,24 +11,16 @@
 
 [ "$USER" = 'root' ] || exit 1
 
-fn_setup_init(){
-   
-   # adding apt-get restricted repositories by editing 
-   # /etc/apt/sources.list file
-   if ! [ -f '/etc/apt/sources.list.bak' ]; then  
-      chmod 777 /etc/apt
-      mv /etc/apt/sources.list /etc/apt/sources.list.bak
-      cat /etc/apt/sources.list.bak | sed -e 's;^# deb http; deb http;' -e 's;^# deb-src ; deb-src ;' > /etc/apt/sources.list
-      chmod 755 /etc/apt
-   fi
-
-   ########################################################
+fn_setup_gogrid(){
 
    passwd
    dpkg-query -W -f='${package}\n' > all.pkgs.gogrid
    apt-get -y update
 
    apt-get -y install linux-virtual
+   echo 'export install=01' >> ~/.bashrc
+   echo 'echo "A"' >> ~/.bashrc
+   reboot
    
 # phase 2
 # the file all.pkgs.setup is the minimum install on vmware after some basic
@@ -36,7 +28,9 @@ fn_setup_init(){
 # while the file all.pkgs.gogrid is the pkgs installed at gogrid ub 10.04 
 # server
 
+}
 
+fn_gogrid02()
    cat all.pkgs.gogrid | while read pp; do 
       grep -q "$pp" all.pkgs.setup || echo "$pp" >> extra 
    done
@@ -56,7 +50,30 @@ fn_setup_init(){
    apt-get -y install agit-core zsh tcl8.5
    apt-get -y upgrade
 
-   ######################################################
+
+
+}
+
+
+
+
+fn_setup_init(){
+   
+   pkgsBasic='build-essential curl wget git-core openssl libssl-dev'
+   pkgsBasic="$pkgsBasic openssh-server openssh-client libreadline-dev"
+   pkgsBasic="$pkgsBasic libsqlite3-dev libbz2-dev libssl-dev"
+   pkgsExtra='vim-nox zsh tcl8.5' 
+   pkgsInstall="$pkgsBasic $pkgsExtra"
+   
+   # adding apt-get restricted repositories by editing 
+   # /etc/apt/sources.list file
+   if ! [ -f '/etc/apt/sources.list.bak' ]; then  
+      chmod 777 /etc/apt
+      mv /etc/apt/sources.list /etc/apt/sources.list.bak
+      cat /etc/apt/sources.list.bak | sed -e 's;^# deb http; deb http;' -e 's;^# deb-src ; deb-src ;' > /etc/apt/sources.list
+      chmod 755 /etc/apt
+   fi
+
    
    sudo apt-get -y update
    sudo apt-get -y upgrade
@@ -67,6 +84,9 @@ fn_setup_init(){
 
 fn_setup_git(){
    # clone repo  
+   gitRepo='ubnz'
+   gitAddress="git://github.com/bitbyteme/$gitRepo.git"
+   
    git clone "$gitAddress" || exit 1
    cd "$gitRepo" 
    cp -R * .* ~/. 2>/dev/null
@@ -78,6 +98,9 @@ fn_setup_git(){
 }
 
 fn_setup_redis(){
+   redisVer='2.4.4'
+   redisURL="http://redis.googlecode.com/files/redis-$redisVer.tar.gz"
+   
    curl "$redisURL" | tar -zvx
    srcDir="redis-$redisVer"
    [ -e "$srcDir" ] || exit 2
@@ -88,6 +111,9 @@ fn_setup_redis(){
 }
 
 fn_setup_python(){
+   pyVer='2.7.2'
+   pyURL="http://python.org/ftp/python/$pyVer/Python-$pyVer.tgz"
+   
    curl "$pyURL" | tar -zvx
    cd "Python-$pyVer"
    ./configure &&
@@ -103,6 +129,9 @@ fn_setup_python(){
 }
 
 fn_setup_nodejs(){
+   ndVer='0.6.6'
+   ndURL="http://nodejs.org/dist/v0.6.6/node-v$ndVer.tar.gz"
+
    curl "$ndURL" | tar -zvx
    cd "node-v$ndVer"
    ./configure &&
@@ -132,33 +161,12 @@ fn_setup_sys(){
 main(){
    curDir="$PWD"
 
-   # variables for fn_setup
-   pkgsBasic='build-essential curl wget git-core openssl libssl-dev'
-   pkgsBasic="$pkgsBasic openssh-server openssh-client libreadline-dev"
-   pkgsBasic="$pkgsBasic libsqlite3-dev libbz2-dev libssl-dev"
-   pkgsExtra='vim-nox zsh tcl8.5' 
-   pkgsInstall="$pkgsBasic $pkgsExtra"
+   fn_setup_gogrid
    #fn_setup_init
-
-   # variable for fn_setup_git
-   gitRepo='ubnz'
-   gitAddress="git://github.com/bitbyteme/$gitRepo.git"
    #fn_setup_git
-
-
-   redisVer='2.4.4'
-   redisURL="http://redis.googlecode.com/files/redis-$redisVer.tar.gz"
    #fn_setup_redis
-   
-   pyVer='2.7.2'
-   pyURL="http://python.org/ftp/python/$pyVer/Python-$pyVer.tgz"
    #fn_setup_python
-
-   ndVer='0.6.6'
-   ndURL="http://nodejs.org/dist/v0.6.6/node-v$ndVer.tar.gz"
    #fn_setup_nodejs
-   
-
    #fn_setup_sys
 
 }
