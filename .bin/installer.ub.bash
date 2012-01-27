@@ -12,30 +12,28 @@
 [ "$USER" = 'root' ] || exit 1
 
 fn_setup_gogrid01(){
-
+   err=1
    echo 'export oldKernel="$(uname -a)"' >> ~/.bashrc
-   
-   apt-get -y update &&
-   apt-get -y upgrade
-   apt-get -y install curl &&
-
-   dpkg-query -W -f='${package}\n' > "$tmp/all.pkgs.gogrid"
    echo 'export phase=01' >> ~/.bashrc
-   
+
+   apt-get -y update &&
+   apt-get -y upgrade &&
+   apt-get -y install curl &&
+   dpkg-query -W -f='${package}\n' > "$tmp/all.pkgs.gogrid"  || exit $err
+
    reboot
 }
 
 fn_setup_gogrid02(){
-   
    # phase 2 of gogrid setup.
    #
    # the file all.pkgs.min is the minimum install on vmware after some 
    # basic setup.
    # while the file all.pkgs.gogrid is the pkgs installed at gogrid 
    # ub 10.04 server
-
+   err=2
    echo 'export phase=02' >> ~/.bashrc
-   curl 'https://raw.github.com/bitbyteme/ubnz/master/.bin/all.pkgs.setup' > "$tmp/all.pkgs.min"
+   curl 'https://raw.github.com/bitbyteme/ubnz/master/.bin/all.pkgs.min' > "$tmp/all.pkgs.min" || exit $err
 
    cat "$tmp/all.pkgs.gogrid" | while read pp; do 
       grep -q "$pp" "$tmp/all.pkgs.min" || echo "$pp" >> "$tmp/extra" 
@@ -45,24 +43,26 @@ fn_setup_gogrid02(){
    # removing all pkgs different in the ub.gogrid from vmware version.
    #
    # but left behing appArmor
-
+   err=3
    cat "$tmp/extra" | while read pp; do 
       echo "$pp" | grep -q 'apparmor'  && continue
-      apt-get -y purge "$pp" || exit 2
+      apt-get -y purge "$pp" || exit $err
    done 
 
-   apt-get -y autoremove
-   apt-get -y install git-core zsh tcl8.5
-   apt-get -y upgrade
-   reboot
+   err=4
+   apt-get -y autoremove &&
+   apt-get -y install git-core tcl8.5 &&
+   apt-get -y upgrade &&
+   reboot || exit $err
 }
 
 fn_setup_init(){
-   
+   echo 'export phase=03' >> ~/.bashrc
+
    pkgsBasic='build-essential curl wget git-core openssl libssl-dev'
    pkgsBasic="$pkgsBasic openssh-server openssh-client libreadline-dev"
    pkgsBasic="$pkgsBasic libsqlite3-dev libbz2-dev libssl-dev"
-   pkgsExtra='vim-nox zsh tcl8.5' 
+   pkgsExtra='vim-nox zsh'
    pkgsInstall="$pkgsBasic $pkgsExtra"
    
    # adding apt-get restricted repositories by editing 
@@ -74,11 +74,12 @@ fn_setup_init(){
       chmod 755 /etc/apt
    fi
    
-   sudo apt-get -y update
-   sudo apt-get -y upgrade
-   
-   sudo apt-get -y install $pkgsInstall
-   sudo apt-get -y autoremove
+   err=5
+   sudo apt-get -y update &&
+   sudo apt-get -y upgrade &&
+   sudo apt-get -y install $pkgsInstall &&
+   sudo apt-get -y autoremove &&
+   reboot || exit $err
 }
 
 fn_setup_git(){
@@ -86,7 +87,8 @@ fn_setup_git(){
    gitRepo='ubnz'
    gitAddress="git://github.com/bitbyteme/$gitRepo.git"
    
-   git clone "$gitAddress" || exit 1
+   err=6
+   git clone "$gitAddress" || exit $err
    [ "$curDir" = "$HOME" ] || mv "$gitRepo" "$HOME/."
    #cd "$gitRepo" 
    #cp -R * .* ~/. 2>/dev/null
