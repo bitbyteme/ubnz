@@ -16,34 +16,37 @@ fn_setup_gogrid01(){
    apt-get -y update &&
    apt-get -y install curl &&
 
-   echo 'export install=01' >> ~/.bashrc
+   dpkg-query -W -f='${package}\n' > "$tmp/all.pkgs.gogrid"
+   echo 'export phase=01' >> ~/.bashrc
    echo 'export oldKernel="$(uname -a)"' >> ~/.bashrc
    
    reboot
+}
+
+fn_setup_gogrid02(){
    
-   # phase 2
+   # phase 2 of gogrid setup.
+   #
    # the file all.pkgs.min is the minimum install on vmware after some 
    # basic setup.
    # while the file all.pkgs.gogrid is the pkgs installed at gogrid 
    # ub 10.04 server
-}
 
-fn_setup_gogrid02(){
-   dpkg-query -W -f='${package}\n' > "$tmp/all.pkgs.gogrid" &&
+   echo 'export phase=02' >> ~/.bashrc
    curl 'https://raw.github.com/bitbyteme/ubnz/master/.bin/all.pkgs.setup' > "$tmp/all.pkgs.min"
 
    cat "$tmp/all.pkgs.gogrid" | while read pp; do 
-      grep -q "$pp" "$tmp/all.pkgs.setup" || echo "$pp" >> "$tmp/extra" 
+      grep -q "$pp" "$tmp/all.pkgs.min" || echo "$pp" >> "$tmp/extra" 
    done
 
-# assuming the new linux kernel installed is the updated one.
-# removing all pkgs different in the ub.gogrid from vmware version.
-#
-# but left behing appArmor
+   # assuming the new linux kernel installed is the updated one.
+   # removing all pkgs different in the ub.gogrid from vmware version.
+   #
+   # but left behing appArmor
 
    cat "$tmp/extra" | while read pp; do 
       echo "$pp" | grep -q 'apparmor'  && continue
-      apt-get -y purge "$pp"
+      apt-get -y purge "$pp" || exit 2
    done 
 
    apt-get -y autoremove
@@ -82,12 +85,13 @@ fn_setup_git(){
    gitAddress="git://github.com/bitbyteme/$gitRepo.git"
    
    git clone "$gitAddress" || exit 1
-   cd "$gitRepo" 
-   cp -R * .* ~/. 2>/dev/null
+   [ "$curDir" = "$HOME" ] || mv "$gitRepo" "$HOME/."
+   #cd "$gitRepo" 
+   #cp -R * .* ~/. 2>/dev/null
 
-   cd "$curDir"
-   rm -rf "$gitRepo"
-   git init
+   #cd "$curDir"
+   #rm -rf "$gitRepo"
+   #git init
 }
 
 fn_setup_redis(){
@@ -116,7 +120,7 @@ fn_setup_python(){
    cd "$curDir"
   
    curl "http://python-distribute.org/distribute_setup.py" | /usr/local/bin/python2.7
-   curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py  | /usr/local/bin/python2.7
+   curl "https://raw.github.com/pypa/pip/master/contrib/get-pip.py"  | /usr/local/bin/python2.7
 }
 
 fn_setup_nodejs(){
@@ -149,11 +153,12 @@ fn_setup_sys(){
 
 main(){
    curDir="$PWD"
-   tmp="/tmp/$$/"
+   tmp="$HOME/.tmp/$$/"
    mkdir -p "$tmp" || exit 1
 
-   fn_setup_gogrid
-   #fn_setup_init
+   [ -z "$phase" ] && fn_setup_gogrid01
+   [ "$phase" = '01' ] && fn_setup_gogrid02
+   [ "$phase" = '02' ] && fn_setup_init
    #fn_setup_git
    #fn_setup_redis
    #fn_setup_python
