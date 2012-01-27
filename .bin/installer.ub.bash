@@ -163,11 +163,13 @@ main(){
    [ -z "$phase" ] && fn_setup_gogrid01
    [ "$phase" = '01' ] && fn_setup_gogrid02
    [ "$phase" = '02' ] && fn_setup_init
-   #fn_setup_git
-   #fn_setup_redis
-   #fn_setup_python
-   #fn_setup_nodejs
-   #fn_setup_sys
+   [ "$phase" = '03' ] && {
+      fn_setup_git
+      fn_setup_redis
+      fn_setup_python
+      fn_setup_nodejs
+      fn_setup_sys
+   }
 
    rm -rf "$tmp"
 }
