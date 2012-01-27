@@ -11,58 +11,46 @@
 
 [ "$USER" = 'root' ] || exit 1
 
-fn_setup_gogrid(){
+fn_setup_gogrid01(){
 
-   dpkg-query -W -f='${package}\n' > "$tmp/all.pkgs.gogrid"
-   #echo 'export install=01' >> ~/.bashrc
-   
-   
+   apt-get -y update &&
+   apt-get -y install curl &&
+
+   echo 'export install=01' >> ~/.bashrc
    echo 'export oldKernel="$(uname -a)"' >> ~/.bashrc
-   apt-get -y update
-   apt-get -y install curl 
    
-   curl 'https://raw.github.com/bitbyteme/ubnz/master/.bin/all.pkgs.setup' > "$tmp/all.pkgs.min"
+   reboot
    
-   #apt-get -y install linux-virtual
-   #reboot
-   
-# phase 2
-# the file all.pkgs.setup is the minimum install on vmware after some basic
-# setup.
-# while the file all.pkgs.gogrid is the pkgs installed at gogrid ub 10.04 
-# server
-
+   # phase 2
+   # the file all.pkgs.min is the minimum install on vmware after some 
+   # basic setup.
+   # while the file all.pkgs.gogrid is the pkgs installed at gogrid 
+   # ub 10.04 server
 }
 
-fn_gogrid02(){
+fn_setup_gogrid02(){
+   dpkg-query -W -f='${package}\n' > "$tmp/all.pkgs.gogrid" &&
+   curl 'https://raw.github.com/bitbyteme/ubnz/master/.bin/all.pkgs.setup' > "$tmp/all.pkgs.min"
 
-
-
-   cat all.pkgs.gogrid | while read pp; do 
-      grep -q "$pp" all.pkgs.setup || echo "$pp" >> extra 
+   cat "$tmp/all.pkgs.gogrid" | while read pp; do 
+      grep -q "$pp" "$tmp/all.pkgs.setup" || echo "$pp" >> "$tmp/extra" 
    done
 
-# assuming the new linux kernel installed is the one loaded.
-# emoving all pkgs different in the ub.gogrid from vmware version.
+# assuming the new linux kernel installed is the updated one.
+# removing all pkgs different in the ub.gogrid from vmware version.
 #
 # but left behing appArmor
 
-   cat extra | while read pp; do 
+   cat "$tmp/extra" | while read pp; do 
       echo "$pp" | grep -q 'apparmor'  && continue
-      apt-get -y purge $pp
+      apt-get -y purge "$pp"
    done 
+
    apt-get -y autoremove
-   reboot
-
-   apt-get -y install agit-core zsh tcl8.5
+   apt-get -y install git-core zsh tcl8.5
    apt-get -y upgrade
-
-
-
+   reboot
 }
-
-
-
 
 fn_setup_init(){
    
@@ -80,7 +68,6 @@ fn_setup_init(){
       cat /etc/apt/sources.list.bak | sed -e 's;^# deb http; deb http;' -e 's;^# deb-src ; deb-src ;' > /etc/apt/sources.list
       chmod 755 /etc/apt
    fi
-
    
    sudo apt-get -y update
    sudo apt-get -y upgrade
@@ -101,7 +88,6 @@ fn_setup_git(){
    cd "$curDir"
    rm -rf "$gitRepo"
    git init
-
 }
 
 fn_setup_redis(){
@@ -131,8 +117,6 @@ fn_setup_python(){
   
    curl "http://python-distribute.org/distribute_setup.py" | /usr/local/bin/python2.7
    curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py  | /usr/local/bin/python2.7
-
-
 }
 
 fn_setup_nodejs(){
@@ -148,9 +132,7 @@ fn_setup_nodejs(){
 
    curl 'http://npmjs.org/install.sh' | sh 
    npm 'express'
-
 }
-
 
 fn_setup_sys(){
    # setting up fn_setup_git
@@ -179,7 +161,6 @@ main(){
    #fn_setup_sys
 
    rm -rf "$tmp"
-
 }
 
 main
