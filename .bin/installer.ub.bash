@@ -18,8 +18,7 @@ fn_setup_gogrid01(){
 
    apt-get -y update &&
    apt-get -y upgrade &&
-   apt-get -y install curl &&
-   dpkg-query -W -f='${package}\n' > "$tmp/all.pkgs.gogrid"  || exit $err
+   apt-get -y install curl || exit $err
 
    reboot
 }
@@ -35,6 +34,7 @@ fn_setup_gogrid02(){
    echo 'export phase=02' >> ~/.bashrc
    curl 'https://raw.github.com/bitbyteme/ubnz/master/.bin/all.pkgs.min' > "$tmp/all.pkgs.min" || exit $err
 
+   dpkg-query -W -f='${package}\n' > "$tmp/all.pkgs.gogrid"  
    cat "$tmp/all.pkgs.gogrid" | while read pp; do 
       grep -q "$pp" "$tmp/all.pkgs.min" || echo "$pp" >> "$tmp/extra" 
    done
@@ -157,7 +157,7 @@ fn_setup_sys(){
 
 main(){
    curDir="$PWD"
-   tmp="$HOME/.tmp/$$/"
+   tmp="$HOME/.tmp/"
    mkdir -p "$tmp" || exit 1
 
    [ -z "$phase" ] && fn_setup_gogrid01
