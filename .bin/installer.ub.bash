@@ -99,7 +99,7 @@ fn_setup_git(){
 }
 
 fn_setup_redis(){
-   redisVer='2.4.4'
+   redisVer='2.4.6'
    redisURL="http://redis.googlecode.com/files/redis-$redisVer.tar.gz"
    
    curl "$redisURL" | tar -zvx
@@ -128,7 +128,7 @@ fn_setup_python(){
 }
 
 fn_setup_nodejs(){
-   ndVer='0.6.6'
+   ndVer='0.6.8'
    ndURL="http://nodejs.org/dist/v0.6.6/node-v$ndVer.tar.gz"
 
    curl "$ndURL" | tar -zvx
@@ -143,15 +143,20 @@ fn_setup_nodejs(){
 }
 
 fn_setup_sys(){
-   # setting up fn_setup_git
+   
+   #
+   # setup startup scripts, bashrc, passwd, host
+   #
+   mv "$HOME/$gitRepo/.dotfiles" "$HOME/."
+
    (ln -s  ~/.dotfiles/bashrc ~/.bashrc
    ln -s ~/.dotfiles/zshrc ~/.zshrc
    ln -s ~/.dotfiles/aliasrc ~/.aliasrc
    ln -s ~/.dotfiles/exportrc ~/.exportrc
    ln -s ~/.dotfiles/vimrc ~/.vimrc
    ln -s ~/.dotfiles/vim ~/.vim ) 2>/dev/null
+   
 
-   # setting up fn_setup_redis
 
 }
 
