@@ -13,12 +13,14 @@
 
 fn_setup_gogrid01(){
 
+   echo 'export oldKernel="$(uname -a)"' >> ~/.bashrc
+   
    apt-get -y update &&
+   apt-get -y upgrade
    apt-get -y install curl &&
 
    dpkg-query -W -f='${package}\n' > "$tmp/all.pkgs.gogrid"
    echo 'export phase=01' >> ~/.bashrc
-   echo 'export oldKernel="$(uname -a)"' >> ~/.bashrc
    
    reboot
 }
