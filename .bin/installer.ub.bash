@@ -41,8 +41,9 @@ fn_setup_gogrid(){
    err=3
    skip="apparmor|install-info|linux-|irqbalance|psmisc|uuid-runtime|wireless-crda"
    cat "$tmp/extra" | while read pp; do 
+      echo "$pp"
       echo "$pp" | grep -qE "$skip"  && continue
-      apt-get -y purge "$pp" || exit $err
+      #apt-get -y purge "$pp" || exit $err
    done 
 
    err=4
