@@ -40,7 +40,7 @@ fn_setup_gogrid(){
    # but left behing appArmor, install-info
    err=3
    skip="apparmor|install-info|linux-|ppp|pppconfig|pppoeconf|bind9"
-   skip="$skip|iptables|ftp|dnsutils|irqbalance|telnet"
+   skip="$skip|iptables|ftp|dnsutils|irqbalance|telnet|^lib"
    cat "$tmp/extra" | while read pp; do 
       echo "$pp" | grep -qE "$skip"  && continue
       apt-get -y purge "$pp" || exit $err
