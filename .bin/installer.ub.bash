@@ -47,7 +47,7 @@ fn_setup_gogrid(){
    done 
 
    err=4
-   echo '++++++++++++ DONE ++++++++++++'
+   echo "\n++++++++++++ DONE ++++++++++++\n"
    apt-get -y autoremove &&
    apt-get -y update 
   # reboot || exit $err
