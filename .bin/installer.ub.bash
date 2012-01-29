@@ -47,7 +47,7 @@ fn_setup_gogrid01(){
    skip='apparmor|istall-info'
    cat "$tmp/extra" | while read pp; do 
       echo "$pp" | grep -qE "$skip"  && continue
-      apt-get -y purge "$pp" || exit $err
+      apt-get purge "$pp" || exit $err
    done 
 
    err=4
