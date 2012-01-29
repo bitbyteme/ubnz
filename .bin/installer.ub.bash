@@ -17,13 +17,13 @@ fn_setup_gogrid01(){
    echo 'export phase=01' >> ~/.bashrc
 
    apt-get -y update &&
-   apt-get -y upgrade &&
+   #apt-get -y upgrade &&
    apt-get -y install curl &&
-   reboot || exit $err
+   #reboot || exit $err
 
-}
+#}
 
-fn_setup_gogrid02(){
+#fn_setup_gogrid02(){
    # phase 2 of gogrid setup.
    #
    # the file all.pkgs.min is the minimum install on vmware after some 
