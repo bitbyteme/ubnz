@@ -32,7 +32,7 @@ fn_setup_gogrid01(){
    # ub 10.04 server
    err=2
    #echo 'export phase=02' >> ~/.bashrc
-   #curl 'https://raw.github.com/bitbyteme/ubnz/master/.bin/all.pkgs.min' > "$tmp/all.pkgs.min" || exit $err
+   curl 'https://raw.github.com/bitbyteme/ubnz/master/.bin/all.pkgs.min' > "$tmp/all.pkgs.min" || exit $err
 
    dpkg-query -W -f='${package}\n' > "$tmp/all.pkgs.gogrid"  
    cat "$tmp/all.pkgs.gogrid" | while read pp; do 
