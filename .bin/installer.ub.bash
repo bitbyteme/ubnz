@@ -44,6 +44,8 @@ fn_setup_gogrid02(){
    #
    # but left behing appArmor
    err=3
+   ls "$tmp"
+   read ans
    cat "$tmp/extra" | while read pp; do 
       echo "$pp" | grep -q 'apparmor'  && continue
       apt-get -y purge "$pp" || exit $err
