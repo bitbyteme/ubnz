@@ -168,7 +168,7 @@ fn_setup_sys(){
 
 main(){
    curDir="$PWD"
-   tmp="$HOME/.tmp/"
+   tmp="$HOME/.mytmp/"
    err=98
    mkdir -p "$tmp" || exit $err
 
