@@ -39,7 +39,7 @@ fn_setup_gogrid(){
    #
    # but left behing appArmor, install-info
    err=3
-   skip="apparmor|install-info|irqbalance|linux-"
+   skip="apparmor|install-info|linux-|irqbalance"
    cat "$tmp/extra" | while read pp; do 
       echo "$pp" | grep -qE "$skip"  && continue
       [ "$pp" = 'psmisc' ] && break
