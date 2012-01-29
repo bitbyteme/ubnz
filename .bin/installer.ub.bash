@@ -46,6 +46,7 @@ fn_setup_gogrid02(){
    err=3
    cat "$tmp/extra" | while read pp; do 
       echo "$pp" | grep -q 'apparmor'  && continue
+      echo "$pp" | grep -q 'install-info'  && continue
       apt-get -y purge "$pp" || exit $err
    done 
 
