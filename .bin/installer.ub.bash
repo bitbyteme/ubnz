@@ -21,7 +21,7 @@ fn_setup_gogrid(){
    
    err=1
    #echo 'export oldKernel="$(uname -a)"' >> ~/.bashrc
-   echo 'export phase=01' >> ~/.bashrc
+   #echo 'export phase=01' >> ~/.bashrc
 
    apt-get -y update &&
    apt-get -y install curl 
