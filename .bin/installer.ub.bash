@@ -48,7 +48,7 @@ fn_setup_gogrid(){
 
    err=4
    apt-get -y autoremove &&
-   apt-get -y update &&
+   apt-get -y update 
   # reboot || exit $err
 }
 
