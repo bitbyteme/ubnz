@@ -183,7 +183,6 @@ main(){
       fn_setup_sys
    }
 
-   rm -rf "$tmp"
 }
 
 main
