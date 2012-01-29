@@ -42,7 +42,7 @@ fn_setup_gogrid(){
    skip="apparmor|install-info|linux-|irqbalance|psmisc"
    cat "$tmp/extra" | while read pp; do 
       echo "$pp" | grep -qE "$skip"  && continue
-      [ "$pp" = 'telnet' ] && break
+      [ "$pp" = 'uuid-runtime' ] && break
       apt-get -y purge "$pp" || exit $err
    done 
 
