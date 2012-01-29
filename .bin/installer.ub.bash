@@ -8,8 +8,8 @@
 ## need a test for user. must be root
 #
 
-
-[ "$USER" = 'root' ] || exit 1
+err=99
+[ "$USER" = 'root' ] || exit $err
 
 fn_setup_gogrid01(){
    err=1
@@ -18,9 +18,9 @@ fn_setup_gogrid01(){
 
    apt-get -y update &&
    apt-get -y upgrade &&
-   apt-get -y install curl || exit $err
+   apt-get -y install curl &&
+   reboot || exit $err
 
-   reboot
 }
 
 fn_setup_gogrid02(){
@@ -53,7 +53,7 @@ fn_setup_gogrid02(){
 
    err=4
    apt-get -y autoremove &&
-   apt-get -y install git-core tcl8.5 &&
+   apt-get -y update &&
    apt-get -y upgrade &&
    reboot || exit $err
 }
@@ -63,7 +63,7 @@ fn_setup_init(){
 
    pkgsBasic='build-essential curl wget git-core openssl libssl-dev'
    pkgsBasic="$pkgsBasic openssh-server openssh-client libreadline-dev"
-   pkgsBasic="$pkgsBasic libsqlite3-dev libbz2-dev libssl-dev"
+   pkgsBasic="$pkgsBasic libsqlite3-dev libbz2-dev libssl-dev tcl8.5"
    pkgsExtra='vim-nox zsh'
    pkgsInstall="$pkgsBasic $pkgsExtra"
    
@@ -104,9 +104,10 @@ fn_setup_redis(){
    redisVer='2.4.6'
    redisURL="http://redis.googlecode.com/files/redis-$redisVer.tar.gz"
    
+   err=7
    curl "$redisURL" | tar -zvx
    srcDir="redis-$redisVer"
-   [ -e "$srcDir" ] || exit 2
+   [ -e "$srcDir" ] || exit $err
    
    cd "$srcDir"; make
    cd "$curDir/$srcDir/src"; make test
@@ -117,11 +118,12 @@ fn_setup_python(){
    pyVer='2.7.2'
    pyURL="http://python.org/ftp/python/$pyVer/Python-$pyVer.tgz"
    
+   err=8
    curl "$pyURL" | tar -zvx
    cd "Python-$pyVer"
    ./configure &&
    make  &&
-   make altinstall || exit 3
+   make altinstall || exit $err
    
    cd "$curDir"
   
@@ -133,11 +135,12 @@ fn_setup_nodejs(){
    ndVer='0.6.8'
    ndURL="http://nodejs.org/dist/v0.6.6/node-v$ndVer.tar.gz"
 
+   err=9
    curl "$ndURL" | tar -zvx
    cd "node-v$ndVer"
    ./configure &&
    make &&
-   make install || exit 4
+   make install || exit $err
    cd "$curlDir"
 
    curl 'http://npmjs.org/install.sh' | sh 
@@ -149,23 +152,25 @@ fn_setup_sys(){
    #
    # setup startup scripts, bashrc, passwd, host
    #
-   mv "$HOME/$gitRepo/.dotfiles" "$HOME/."
-
+   
+   err=10
+   mkdir ~/.backups &&
+   mv "$HOME/$gitRepo/.dotfiles" "$HOME/." &&
+   mv ~/.bashrc  ~/.vimrc ~/.vim ~/.zshrc ~/.backups/. || exit $err
+   
    (ln -s  ~/.dotfiles/bashrc ~/.bashrc
    ln -s ~/.dotfiles/zshrc ~/.zshrc
    ln -s ~/.dotfiles/aliasrc ~/.aliasrc
    ln -s ~/.dotfiles/exportrc ~/.exportrc
    ln -s ~/.dotfiles/vimrc ~/.vimrc
    ln -s ~/.dotfiles/vim ~/.vim ) 2>/dev/null
-   
-
-
 }
 
 main(){
    curDir="$PWD"
    tmp="$HOME/.tmp/"
-   mkdir -p "$tmp" || exit 1
+   err=98
+   mkdir -p "$tmp" || exit $err
 
    [ -z "$phase" ] && fn_setup_gogrid01
    [ "$phase" = '01' ] && fn_setup_gogrid02
