@@ -34,10 +34,10 @@ fn_setup_gogrid02(){
    #echo 'export phase=02' >> ~/.bashrc
    #curl 'https://raw.github.com/bitbyteme/ubnz/master/.bin/all.pkgs.min' > "$tmp/all.pkgs.min" || exit $err
 
-   #dpkg-query -W -f='${package}\n' > "$tmp/all.pkgs.gogrid"  
-   #cat "$tmp/all.pkgs.gogrid" | while read pp; do 
-   #   grep -q "$pp" "$tmp/all.pkgs.min" || echo "$pp" >> "$tmp/extra" 
-   #done
+   dpkg-query -W -f='${package}\n' > "$tmp/all.pkgs.gogrid"  
+   cat "$tmp/all.pkgs.gogrid" | while read pp; do 
+      grep -q "$pp" "$tmp/all.pkgs.min" || echo "$pp" >> "$tmp/extra" 
+   done
 
    # assuming the new linux kernel installed is the updated one.
    # removing all pkgs different in the ub.gogrid from vmware version.
