@@ -13,7 +13,7 @@ err=99
 
 fn_setup_gogrid01(){
    err=1
-   echo 'export oldKernel="$(uname -a)"' >> ~/.bashrc
+   #echo 'export oldKernel="$(uname -a)"' >> ~/.bashrc
    echo 'export phase=01' >> ~/.bashrc
 
    apt-get -y update &&
@@ -42,18 +42,19 @@ fn_setup_gogrid02(){
    # assuming the new linux kernel installed is the updated one.
    # removing all pkgs different in the ub.gogrid from vmware version.
    #
-   # but left behing appArmor
+   # but left behing appArmor, install-info
    err=3
+   skip='apparmor|istall-info'
    cat "$tmp/extra" | while read pp; do 
-      echo "$pp" | grep -q 'apparmor'  && continue
-      echo "$pp" | grep -q 'install-info'  && continue
+      echo "$pp" | grep -qE "$skip"  && continue
       apt-get -y purge "$pp" || exit $err
    done 
 
    err=4
    apt-get -y autoremove &&
    apt-get -y update &&
-   apt-get -y upgrade || exit $err
+   apt-get -y upgrade &&
+   exit $err
    #reboot || exit $err
 }
 
