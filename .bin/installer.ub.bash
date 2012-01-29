@@ -44,7 +44,7 @@ fn_setup_gogrid01(){
    #
    # but left behing appArmor, install-info
    err=3
-   skip='apparmor|install-info'
+   skip='apparmor|install-info|linux-image'
    cat "$tmp/extra" | while read pp; do 
       echo "$pp" | grep -qE "$skip"  && continue
       apt-get -y purge "$pp" || exit $err
