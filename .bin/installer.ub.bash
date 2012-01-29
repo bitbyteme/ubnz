@@ -39,14 +39,15 @@ fn_setup_gogrid(){
    #
    # but left behing appArmor, install-info
    err=3
-   skip="apparmor|install-info|linux-|irqbalance|psmisc|uuid-runtime"
+   skip="apparmor|install-info|linux-|irqbalance|psmisc"
    cat "$tmp/extra" | while read pp; do 
       echo "$pp" | grep -qE "$skip"  && continue
-#      [ "$pp" = 'uuid-runtime' ] && break
+      [ "$pp" = 'uuid-runtime' ] && break
       apt-get -y purge "$pp" || exit $err
    done 
 
    err=4
+   echo '++++++++++++ DONE ++++++++++'
    apt-get -y autoremove &&
    apt-get -y update 
   # reboot || exit $err
