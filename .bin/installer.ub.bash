@@ -39,8 +39,7 @@ fn_setup_gogrid(){
    #
    # but left behing appArmor, install-info
    err=3
-   skip="apparmor|install-info|linux-|ppp|pppconfig|pppoeconf"
-   skip="$skip|iptables|ftp|dnsutils|irqbalance|telnet"
+   skip="apparmor|install-info|irqbalance|memtest86+|linux-"
    cat "$tmp/extra" | while read pp; do 
       echo "$pp" | grep -qE "$skip"  && continue
       [ "$pp" = 'psmisc' ] && break
