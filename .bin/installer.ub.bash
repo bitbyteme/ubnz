@@ -19,7 +19,6 @@ fn_setup_gogrid(){
    # while the file all.pkgs.gogrid is the pkgs installed at gogrid 
    # ub 10.04 server
 
-   #echo 'export phase=01' >> ~/.bashrc
    
    err=1
    apt-get -y update &&
@@ -51,12 +50,12 @@ fn_setup_gogrid(){
 
    err=4
    apt-get -y autoremove &&
-   apt-get -y update || exit $err
-  # reboot || exit $err
+   apt-get -y update &&
+   echo 'export phase=01' >> ~/.bashrc &&
+   reboot || exit $err
 }
 
 fn_setup_init(){
-   echo 'export phase=03' >> ~/.bashrc
 
    pkgsBasic='build-essential curl wget git-core openssl libssl-dev'
    pkgsBasic="$pkgsBasic openssh-server openssh-client libreadline-dev"
@@ -80,6 +79,7 @@ fn_setup_init(){
    sudo apt-get -y upgrade &&
    sudo apt-get -y install $pkgsInstall &&
    sudo apt-get -y autoremove &&
+   echo 'export phase=02' >> ~/.bashrc &&
    reboot || exit $err
 }
 
