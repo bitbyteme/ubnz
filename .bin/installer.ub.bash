@@ -18,6 +18,8 @@ fn_setup_gogrid(){
    # basic setup.
    # while the file all.pkgs.gogrid is the pkgs installed at gogrid 
    # ub 10.04 server
+
+   #echo 'export phase=01' >> ~/.bashrc
    
    err=1
    apt-get -y update &&
