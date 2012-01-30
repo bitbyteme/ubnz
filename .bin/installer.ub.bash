@@ -158,6 +158,12 @@ fn_setup_sys(){
    ln -s ~/.dotfiles/exportrc ~/.exportrc
    ln -s ~/.dotfiles/vimrc ~/.vimrc
    ln -s ~/.dotfiles/vim ~/.vim ) 2>/dev/null
+
+   clear
+   echo 'Run passwd to change the default password.'
+   echo 'And run chsh -s "$(which zsh)" to change the default shell' 
+   echo 'from bash into zsh.'
+
 }
 
 main(){

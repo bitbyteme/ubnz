@@ -57,7 +57,7 @@ set breakat=\
 set linebreak
 set showbreak=\ ...\ 
 
-set relativenumber
+"set relativenumber
 "set colorcolumn=78
 
 set autoindent		  " this use the current line's indent level to set the indent level of new lines
