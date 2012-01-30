@@ -39,6 +39,9 @@ fn_setup_gogrid(){
    skip="apparmor|install-info|irqbalance|psmisc|linux-generic"
    skip="$skip|linux-$(uname -r)|uuid-runtime|wireless-crda"
    skip="$skip|linux-image-generic"
+
+   echo "\n++++++++++++ BEGIN +++++++++++\n"
+   
    cat "$tmp/extra" | while read pp; do 
       echo "$pp"
       echo "$pp" | grep -qE "$skip"  && continue
