@@ -20,26 +20,25 @@ fn_setup_gogrid(){
    # ub 10.04 server
    
    err=1
-   #echo 'export oldKernel="$(uname -a)"' >> ~/.bashrc
-   #echo 'export phase=01' >> ~/.bashrc
-
    apt-get -y update &&
-   apt-get -y install curl 
-   
+   apt-get -y install curl &&
    curl 'https://raw.github.com/bitbyteme/ubnz/master/.bin/all.pkgs.min' > "$tmp/all.pkgs.min" || exit $err
 
-   dpkg-query -W -f='${package}\n' > "$tmp/all.pkgs.gogrid"  
-   rm "$tmp/extra" 2>/dev/null
+   err=2
+   dpkg-query -W -f='${package}\n' > "$tmp/all.pkgs.gogrid"  &&
+   rm "$tmp/extra" 2>/dev/null &&
    cat "$tmp/all.pkgs.gogrid" | while read pp; do 
       grep -q "$pp" "$tmp/all.pkgs.min" || echo "$pp" >> "$tmp/extra" 
-   done
+   done || exit $err
 
    # assuming the new linux kernel installed is the updated one.
    # removing all pkgs different in the ub.gogrid from vmware version.
    #
    # but left behing appArmor, install-info
    err=3
-   skip="apparmor|install-info|linux-|irqbalance|psmisc|uuid-runtime|wireless-crda"
+   skip="apparmor|install-info|irqbalance|psmisc|linux-generic"
+   skip="$skip|linux-$(uname -r)|uuid-runtime|wireless-crda"
+   skip="$skip|linux-image-generic"
    cat "$tmp/extra" | while read pp; do 
       echo "$pp"
       echo "$pp" | grep -qE "$skip"  && continue
@@ -49,7 +48,7 @@ fn_setup_gogrid(){
    err=4
    echo "\n++++++++++++ DONE ++++++++++++\n"
    apt-get -y autoremove &&
-   apt-get -y update 
+   apt-get -y update || exit $err
   # reboot || exit $err
 }
 
@@ -60,18 +59,20 @@ fn_setup_init(){
    pkgsBasic="$pkgsBasic openssh-server openssh-client libreadline-dev"
    pkgsBasic="$pkgsBasic libsqlite3-dev libbz2-dev libssl-dev tcl8.5"
    pkgsExtra='vim-nox zsh'
+
    pkgsInstall="$pkgsBasic $pkgsExtra"
    
    # adding apt-get restricted repositories by editing 
    # /etc/apt/sources.list file
    if ! [ -f '/etc/apt/sources.list.bak' ]; then  
-      chmod 777 /etc/apt
-      mv /etc/apt/sources.list /etc/apt/sources.list.bak
-      cat /etc/apt/sources.list.bak | sed -e 's;^# deb http; deb http;' -e 's;^# deb-src ; deb-src ;' > /etc/apt/sources.list
-      chmod 755 /etc/apt
+
+      err=5
+      chmod 777 /etc/apt &&
+      mv /etc/apt/sources.list /etc/apt/sources.list.bak &&
+      cat /etc/apt/sources.list.bak | sed -e 's;^# deb http; deb http;' -e 's;^# deb-src ; deb-src ;' > /etc/apt/sources.list &&
+      chmod 755 /etc/apt || exit $err
    fi
    
-   err=5
    sudo apt-get -y update &&
    sudo apt-get -y upgrade &&
    sudo apt-get -y install $pkgsInstall &&
@@ -86,13 +87,9 @@ fn_setup_git(){
    
    err=6
    git clone "$gitAddress" || exit $err
-   [ "$curDir" = "$HOME" ] || mv "$gitRepo" "$HOME/."
-   #cd "$gitRepo" 
-   #cp -R * .* ~/. 2>/dev/null
-
-   #cd "$curDir"
-   #rm -rf "$gitRepo"
-   #git init
+   [ "$curDir" = "$HOME" ] || {
+      mv "$gitRepo" "$HOME/." || exit $err
+   }
 }
 
 fn_setup_redis(){
@@ -100,46 +97,44 @@ fn_setup_redis(){
    redisURL="http://redis.googlecode.com/files/redis-$redisVer.tar.gz"
    
    err=7
-   curl "$redisURL" | tar -zvx
    srcDir="redis-$redisVer"
-   [ -e "$srcDir" ] || exit $err
-   
-   cd "$srcDir"; make
-   cd "$curDir/$srcDir/src"; make test
-   cd "$curDir"
+   curl "$redisURL" | tar -zvx &&
+   cd "$srcDir" && make &&
+   cd "$curDir/$srcDir/src" && make test &&
+   cd "$curDir" || exit $err
 }
 
 fn_setup_python(){
    pyVer='2.7.2'
    pyURL="http://python.org/ftp/python/$pyVer/Python-$pyVer.tgz"
    
-   err=8
-   curl "$pyURL" | tar -zvx
-   cd "Python-$pyVer"
-   ./configure &&
-   make  &&
-   make altinstall || exit $err
+   err=9
+   curl "$pyURL" | tar -zvx &&
+   cd "Python-$pyVer" && 
+   ./configure && make  &&
+   make altinstall &&
    
-   cd "$curDir"
+   cd "$curDir" &&
   
-   curl "http://python-distribute.org/distribute_setup.py" | /usr/local/bin/python2.7
-   curl "https://raw.github.com/pypa/pip/master/contrib/get-pip.py"  | /usr/local/bin/python2.7
+   curl "http://python-distribute.org/distribute_setup.py" | /usr/local/bin/python2.7 &&
+   curl "https://raw.github.com/pypa/pip/master/contrib/get-pip.py"  | /usr/local/bin/python2.7 || exit $err
 }
 
 fn_setup_nodejs(){
    ndVer='0.6.8'
    ndURL="http://nodejs.org/dist/v0.6.6/node-v$ndVer.tar.gz"
 
-   err=9
-   curl "$ndURL" | tar -zvx
-   cd "node-v$ndVer"
+   err=10
+   curl "$ndURL" | tar -zvx &&
+   cd "node-v$ndVer" &&
    ./configure &&
    make &&
-   make install || exit $err
-   cd "$curlDir"
+   make install &&
 
-   curl 'http://npmjs.org/install.sh' | sh 
-   npm 'express'
+   cd "$curlDir" &&
+
+   curl 'http://npmjs.org/install.sh' | sh &&
+   npm 'express' || exit $err
 }
 
 fn_setup_sys(){
@@ -148,7 +143,7 @@ fn_setup_sys(){
    # setup startup scripts, bashrc, passwd, host
    #
    
-   err=10
+   err=11
    mkdir ~/.backups &&
    mv "$HOME/$gitRepo/.dotfiles" "$HOME/." &&
    mv ~/.bashrc  ~/.vimrc ~/.vim ~/.zshrc ~/.backups/. || exit $err
@@ -164,6 +159,7 @@ fn_setup_sys(){
 main(){
    curDir="$PWD"
    tmp="$HOME/.tmp/"
+
    err=98
    mkdir -p "$tmp" || exit $err
 
