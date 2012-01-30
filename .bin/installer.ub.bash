@@ -44,8 +44,7 @@ fn_setup_gogrid(){
    
    cat "$tmp/extra" | while read pp; do 
       echo "$pp" | grep -qE "$skip"  && continue
-      echo "$pp"
-      #apt-get -y purge "$pp" || exit $err
+      apt-get -y purge "$pp" || exit $err
    done 
 
    echo "\n++++++++++++ DONE ++++++++++++\n"
