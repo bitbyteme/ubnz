@@ -137,7 +137,7 @@ fn_setup_nodejs(){
    cd "$curlDir" &&
 
    curl 'http://npmjs.org/install.sh' | sh &&
-   npm 'express' || exit $err
+   npm install 'express' || exit $err
 }
 
 fn_setup_sys(){
@@ -173,7 +173,7 @@ main(){
       #fn_setup_git
       #fn_setup_redis
       #fn_setup_python
-      fn_setup_nodejs
+      #fn_setup_nodejs
       fn_setup_sys
    }
 }
