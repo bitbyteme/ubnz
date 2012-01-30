@@ -2,13 +2,13 @@
 
 #export TERM="xterm-256color"
 #export LSCOLORS=exfxcxdxbxegedabagacad
-export CLICOLOR=1
-export LSCOLORS=gxfxcxexbxegedabaggCgd
+#export CLICOLOR=1
+#export LSCOLORS=gxfxcxexbxegedabaggCgd
 
 alias vi='vim'
 alias o='open' 
 
-alias ls='ls -F'
+alias ls='ls --color=auto -F'
 alias l1='clear; ls -1'
 alias ll='ls -ihlt'
 alias la='ls -A'
