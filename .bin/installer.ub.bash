@@ -89,14 +89,14 @@ fn_setup_git(){
    gitAddress="git://github.com/bitbyteme/$gitRepo.git"
    
    err=6
-   git clone "$gitAddress" || exit $err
+   git clone "$gitAddress" || return 0
    [ "$curDir" = "$HOME" ] || {
       mv "$gitRepo" "$HOME/." || exit $err
    }
 }
 
 fn_setup_redis(){
-   redisVer='2.4.6'
+   redisVer='2.4.5'
    redisURL="http://redis.googlecode.com/files/redis-$redisVer.tar.gz"
    
    err=7
