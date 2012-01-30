@@ -125,7 +125,7 @@ fn_setup_python(){
 
 fn_setup_nodejs(){
    ndVer='0.6.8'
-   ndURL="http://nodejs.org/dist/v0.6.6/node-v$ndVer.tar.gz"
+   ndURL="http://nodejs.org/dist/v$ndVer/node-v$ndVer.tar.gz"
 
    err=10
    curl "$ndURL" | tar -zvx &&
@@ -170,9 +170,9 @@ main(){
    #[ "$phase" = '01' ] && fn_setup_gogrid02
    [ "$phase" = '01' ] && fn_setup_init
    [ "$phase" = '02' ] && {
-      fn_setup_git
-      fn_setup_redis
-      fn_setup_python
+      #fn_setup_git
+      #fn_setup_redis
+      #fn_setup_python
       fn_setup_nodejs
       fn_setup_sys
    }
