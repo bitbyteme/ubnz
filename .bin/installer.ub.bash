@@ -31,8 +31,8 @@ fn_setup_gogrid(){
       grep -q "$pp" "$tmp/all.pkgs.min" || echo "$pp" >> "$tmp/extra" 
    done || exit $err
 
-   # assuming the new linux kernel installed is the updated one.
-   # removing all pkgs different in the ub.gogrid from vmware version.
+   # removing all pkgs different in the ub.gogrid from vmware 
+   # ub.min version.
    #
    # but left behing appArmor, install-info
    err=3
