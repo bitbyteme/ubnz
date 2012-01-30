@@ -145,6 +145,7 @@ fn_setup_sys(){
    #
    # setup startup scripts, bashrc, passwd, host
    #
+   gitRepo='ubnz'
    
    err=11
    mkdir ~/.backups 2>/dev/null
