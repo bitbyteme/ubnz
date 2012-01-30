@@ -25,8 +25,8 @@ fn_setup_gogrid(){
    curl 'https://raw.github.com/bitbyteme/ubnz/master/.bin/all.pkgs.min' > "$tmp/all.pkgs.min" || exit $err
 
    err=2
+   rm "$tmp/extra" 2>/dev/null 
    dpkg-query -W -f='${package}\n' > "$tmp/all.pkgs.gogrid"  &&
-   rm "$tmp/extra" 2>/dev/null &&
    cat "$tmp/all.pkgs.gogrid" | while read pp; do 
       grep -q "$pp" "$tmp/all.pkgs.min" || echo "$pp" >> "$tmp/extra" 
    done || exit $err
