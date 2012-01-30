@@ -38,8 +38,7 @@ fn_setup_gogrid(){
    #
    # but left behing appArmor, install-info
    err=3
-   skip="apparmor|install-info|irqbalance|uuid-runtime|linux-"
-   skip="$skip|psmisc|wireless-crda"
+   skip="apparmor|install-info|irqbalance|linux-|wireless-crda"
 
    echo "\n++++++++++++ BEGIN +++++++++++\n"
    
