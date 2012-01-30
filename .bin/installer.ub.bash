@@ -48,8 +48,9 @@ fn_setup_gogrid(){
       #apt-get -y purge "$pp" || exit $err
    done 
 
-   err=4
    echo "\n++++++++++++ DONE ++++++++++++\n"
+
+   err=4
    apt-get -y autoremove &&
    apt-get -y update || exit $err
   # reboot || exit $err
