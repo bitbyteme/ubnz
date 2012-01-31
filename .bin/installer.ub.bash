@@ -151,7 +151,6 @@ fn_setup_sys(){
    
    err=11
    mkdir ~/.backups 2>/dev/null
-   #mv "$HOME/$gitRepo/.dotfiles" "$HOME/." &&
    mv ~/.bashrc  ~/.vimrc ~/.vim ~/.zshrc ~/.backups/. 2>/dev/null
    
    sed -i -e 's;HOST=.*;HOST=gg;' "$HOME/$gitRepo/.dotfiles/exportrc"
