@@ -154,6 +154,7 @@ fn_setup_sys(){
    #mv "$HOME/$gitRepo/.dotfiles" "$HOME/." &&
    mv ~/.bashrc  ~/.vimrc ~/.vim ~/.zshrc ~/.backups/. 2>/dev/null
    
+   sed -i -e 's;HOST=.*;HOST=gg;' "$HOME/$gitRepo/.dotfiles/exportrc"
 
    (ln -s "$HOME/$gitRepo/.dotfiles" ~/.dotfiles
    ln -s "$HOME/$gitRepon/.bin" ~/.bin

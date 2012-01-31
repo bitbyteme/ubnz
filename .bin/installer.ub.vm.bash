@@ -109,6 +109,7 @@ fn_setup_sys(){
    #mv "$HOME/$gitRepo/.dotfiles" "$HOME/." &&
    mv ~/.bashrc  ~/.vimrc ~/.vim ~/.zshrc ~/.backups/. 2>/dev/null
    
+   sed -i -e 's;HOST=.*;HOST=vm;' "$HOME/$gitRepo/.dotfiles/exportrc"
 
    (ln -s "$HOME/$gitRepo/.dotfiles" ~/.dotfiles
    ln -s "$HOME/$gitRepon/.bin" ~/.bin
@@ -145,8 +146,6 @@ main(){
 
 main
 echo 'done'
-#echo 'press enter to reboot, or ^C to quit \c'; read
-#reboot
 
 
 
