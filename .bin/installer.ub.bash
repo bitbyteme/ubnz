@@ -92,6 +92,7 @@ fn_setup_redis(){
    
    err=7
    srcDir="redis-$redisVer"
+   cd "$tmp" &&
    curl "$redisURL" | tar -zvx &&
    cd "$srcDir" && make &&
    cd "$curDir/$srcDir/src" && make test &&
@@ -105,22 +106,25 @@ fn_setup_python(){
    pyURL="http://python.org/ftp/python/$pyVer/Python-$pyVer.tgz"
    
    err=9
+   cd "$tmp" &&
    curl "$pyURL" | tar -zvx &&
    cd "Python-$pyVer" && 
    ./configure && make  &&
    make altinstall &&
    
-   cd "$curDir" &&
   
    curl "http://python-distribute.org/distribute_setup.py" | /usr/local/bin/python2.7 &&
-   curl "https://raw.github.com/pypa/pip/master/contrib/get-pip.py"  | /usr/local/bin/python2.7 || exit $err
-}
+   curl "https://raw.github.com/pypa/pip/master/contrib/get-pip.py"  | /usr/local/bin/python2.7 &&
+   cd "$curDir" || exit $err
+
+   }
 
 fn_setup_nodejs(){
    ndVer='0.6.8'
    ndURL="http://nodejs.org/dist/v$ndVer/node-v$ndVer.tar.gz"
 
    err=10
+   cd "$tmp" &&
    curl "$ndURL" | tar -zvx &&
    cd "node-v$ndVer" &&
    ./configure &&
