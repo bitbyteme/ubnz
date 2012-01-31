@@ -83,18 +83,6 @@ fn_setup_init(){
    reboot || exit $err
 }
 
-fn_setup_git(){
-   # clone repo  
-   gitRepo='ubnz'
-   gitAddress="git://github.com/bitbyteme/$gitRepo.git"
-   
-   err=6
-   git clone "$gitAddress" || return 0
-   [ "$curDir" = "$HOME" ] || {
-      mv "$gitRepo" "$HOME/." || exit $err
-   }
-}
-
 fn_setup_redis(){
    redisVer='2.4.5'
    redisURL="http://redis.googlecode.com/files/redis-$redisVer.tar.gz"
@@ -104,7 +92,8 @@ fn_setup_redis(){
    curl "$redisURL" | tar -zvx &&
    cd "$srcDir" && make &&
    cd "$curDir/$srcDir/src" && make test &&
-   cp redis-benchmark redis-check-aof redis-check-dump redis-cli redis-server /usr/local/bin/
+   cp redis-benchmark redis-check-aof redis-check-dump redis-cli \
+      redis-server /usr/local/bin/ &&
    cd "$curDir" || exit $err
 }
 
@@ -139,6 +128,18 @@ fn_setup_nodejs(){
 
    curl 'http://npmjs.org/install.sh' | sh &&
    npm install 'express' || exit $err
+}
+
+fn_setup_git(){
+   # clone repo  
+   gitRepo='ubnz'
+   gitAddress="git://github.com/bitbyteme/$gitRepo.git"
+   
+   err=6
+   git clone "$gitAddress" || return 0
+   [ "$curDir" = "$HOME" ] || {
+      mv "$gitRepo" "$HOME/." || exit $err
+   }
 }
 
 fn_setup_sys(){
@@ -178,21 +179,18 @@ main(){
    mkdir -p "$tmp" || exit $err
 
    [ -z "$phase" ] && fn_setup_gogrid
-   #[ "$phase" = '01' ] && fn_setup_gogrid02
    [ "$phase" = '01' ] && fn_setup_init
    [ "$phase" = '02' ] && {
-      fn_setup_git
       fn_setup_redis
       fn_setup_python
       fn_setup_nodejs
+      fn_setup_git
       fn_setup_sys
    }
 }
 
 main
 echo 'done'
-#echo 'press enter to reboot, or ^C to quit \c'; read
-#reboot
 
 
 

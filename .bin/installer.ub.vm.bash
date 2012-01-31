@@ -11,50 +11,6 @@
 err=99
 [ "$USER" = 'root' ] || exit $err
 
-fn_setup_gogrid(){
-   # phase 2 of gogrid setup.
-   #
-   # the file all.pkgs.min is the minimum install on vmware after some 
-   # basic setup.
-   # while the file all.pkgs.gogrid is the pkgs installed at gogrid 
-   # ub 10.04 server
-
-   
-   err=1
-   apt-get -y update &&
-   apt-get -y install curl &&
-   curl 'https://raw.github.com/bitbyteme/ubnz/master/.bin/all.pkgs.min' > "$tmp/all.pkgs.min" || exit $err
-
-   err=2
-   rm "$tmp/extra" 2>/dev/null 
-   dpkg-query -W -f='${package}\n' > "$tmp/all.pkgs.gogrid"  &&
-   cat "$tmp/all.pkgs.gogrid" | while read pp; do 
-      grep -q "$pp" "$tmp/all.pkgs.min" || echo "$pp" >> "$tmp/extra" 
-   done || exit $err
-
-   # removing all pkgs different in the ub.gogrid from vmware 
-   # ub.min version.
-   #
-   # but left behing appArmor, install-info
-   err=3
-   skip="apparmor|install-info|irqbalance|linux-|wireless-crda"
-
-   echo "\n++++++++++++ BEGIN +++++++++++\n"
-   
-   cat "$tmp/extra" | while read pp; do 
-      echo "$pp" | grep -qE "$skip"  && continue
-      apt-get -y purge "$pp" || exit $err
-   done 
-
-   echo "\n++++++++++++ DONE ++++++++++++\n"
-
-   err=4
-   apt-get -y autoremove &&
-   apt-get -y update &&
-   echo 'export phase=01' >> ~/.bashrc &&
-   reboot || exit $err
-}
-
 fn_setup_init(){
 
    pkgsBasic="build-essential curl wget git-core openssl libssl-dev gfortan"
@@ -79,7 +35,7 @@ fn_setup_init(){
    sudo apt-get -y upgrade &&
    sudo apt-get -y install $pkgsInstall &&
    sudo apt-get -y autoremove &&
-   echo 'export phase=02' >> ~/.bashrc &&
+   echo 'export phase=01' >> ~/.bashrc &&
    reboot || exit $err
 }
 
@@ -177,10 +133,8 @@ main(){
    err=98
    mkdir -p "$tmp" || exit $err
 
-   [ -z "$phase" ] && fn_setup_gogrid
-   #[ "$phase" = '01' ] && fn_setup_gogrid02
-   [ "$phase" = '01' ] && fn_setup_init
-   [ "$phase" = '02' ] && {
+   [ -z "$phase" ] && fn_setup_init
+   [ "$phase" = '01' ] && {
       fn_setup_git
       fn_setup_redis
       fn_setup_python
