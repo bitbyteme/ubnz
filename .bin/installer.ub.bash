@@ -155,7 +155,8 @@ fn_setup_sys(){
    
 
    (ln -s "$HOME/$gitRepo/.dotfiles" ~/.dotfiles
-   ln -s  ~/.dotfiles/bashrc ~/.bashrc
+   ln -s "$HOME/$gitRepon/.bin" ~/.bin
+   ln -s ~/.dotfiles/bashrc ~/.bashrc
    ln -s ~/.dotfiles/zshrc ~/.zshrc
    ln -s ~/.dotfiles/aliasrc ~/.aliasrc
    ln -s ~/.dotfiles/exportrc ~/.exportrc
