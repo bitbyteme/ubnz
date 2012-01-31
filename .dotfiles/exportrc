@@ -8,7 +8,7 @@ export PATH=/usr/local/share/python:~/.bin:/usr/local/bin:$PATH
 export PATH=~/.bin:$PATH
 export PATH=~/.work/py:~/.work:$PATH
 
-export HOST=gg
+export HOST='remote'
 
 #   export CC="gcc-4.2"
 #   export CXX="g++-4.2"
