@@ -114,7 +114,7 @@ fn_setup_sys(){
    sed -i -e 's;HOST=.*;HOST=vm;' "$HOME/$gitRepo/.dotfiles/exportrc"
 
    (ln -s "$HOME/$gitRepo/.dotfiles" ~/.dotfiles
-   ln -s "$HOME/$gitRepon/.bin" ~/.bin
+   ln -s "$HOME/$gitRepo/.bin" ~/.bin
    ln -s ~/.dotfiles/bashrc ~/.bashrc
    ln -s ~/.dotfiles/zshrc ~/.zshrc
    ln -s ~/.dotfiles/aliasrc ~/.aliasrc
