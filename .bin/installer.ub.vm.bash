@@ -9,7 +9,10 @@
 #
 
 err=99
-[ "$USER" = 'root' ] || exit $err
+[ "$USER" = 'root' ] || {
+   echo 'need to be root'
+   exit $err
+}
 
 fn_setup_init(){
 
