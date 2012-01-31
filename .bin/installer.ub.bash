@@ -57,7 +57,7 @@ fn_setup_gogrid(){
 
 fn_setup_init(){
 
-   pkgsBasic='build-essential curl wget git-core openssl libssl-dev'
+   pkgsBasic="build-essential curl wget git-core openssl libssl-dev gfortan"
    pkgsBasic="$pkgsBasic openssh-server openssh-client libreadline-dev"
    pkgsBasic="$pkgsBasic libsqlite3-dev libbz2-dev libssl-dev tcl8.5"
    pkgsExtra='vim-nox zsh'
@@ -104,6 +104,7 @@ fn_setup_redis(){
    curl "$redisURL" | tar -zvx &&
    cd "$srcDir" && make &&
    cd "$curDir/$srcDir/src" && make test &&
+   cp redis-benchmark redis-check-aof redis-check-dump redis-cli redis-server /usr/local/bin/
    cd "$curDir" || exit $err
 }
 
@@ -149,10 +150,12 @@ fn_setup_sys(){
    
    err=11
    mkdir ~/.backups 2>/dev/null
-   mv "$HOME/$gitRepo/.dotfiles" "$HOME/." &&
+   #mv "$HOME/$gitRepo/.dotfiles" "$HOME/." &&
    mv ~/.bashrc  ~/.vimrc ~/.vim ~/.zshrc ~/.backups/. 2>/dev/null
    
-   (ln -s  ~/.dotfiles/bashrc ~/.bashrc
+
+   (ln -s "$HOME/$gitRepo/.dotfiles" ~/.dotfiles
+   ln -s  ~/.dotfiles/bashrc ~/.bashrc
    ln -s ~/.dotfiles/zshrc ~/.zshrc
    ln -s ~/.dotfiles/aliasrc ~/.aliasrc
    ln -s ~/.dotfiles/exportrc ~/.exportrc
@@ -160,7 +163,7 @@ fn_setup_sys(){
    ln -s ~/.dotfiles/vim ~/.vim ) 2>/dev/null
 
    clear
-   echo 'Run passwd to change the default password.'
+   echo 'Run the commdand: passwd, to change the default password.'
    echo 'And run chsh -s "$(which zsh)" to change the default shell' 
    echo 'from bash into zsh.'
 
