@@ -16,7 +16,7 @@ err=99
 
 fn_setup_init(){
 
-   pkgsBasic="build-essential curl wget git-core openssl libssl-dev gfortan"
+   pkgsBasic="build-essential curl wget git-core openssl libssl-dev gfortran"
    pkgsBasic="$pkgsBasic openssh-server openssh-client libreadline-dev"
    pkgsBasic="$pkgsBasic libsqlite3-dev libbz2-dev libssl-dev tcl8.5"
    pkgsExtra='vim-nox zsh'
